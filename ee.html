@@ -67,13 +67,8 @@
   .row-gallery{display:grid; grid-template-columns:repeat(3,1fr); gap:.5rem; margin-top:.75rem; max-width:60ch;}
   .row-gallery img{width:100%; height:100%; object-fit:cover; aspect-ratio:4/3; border-radius:6px; border:1px solid var(--line); display:block;}
   .row-gallery.tall img{aspect-ratio:3/4;}
-  .row-figure{margin:.75rem 0 0; max-width:60ch;}
-  .row-figure img{width:100%; height:auto; border-radius:6px; border:1px solid var(--line); display:block; background:#fff;}
-  .row-figure figcaption{font-size:.8rem; color:var(--ink-faint); margin-top:.35rem;}
-  .row-table{width:100%; max-width:60ch; border-collapse:collapse; margin-top:.75rem; font-size:.85rem; color:var(--ink-soft);}
-  .row-table th, .row-table td{text-align:left; padding:.35rem .5rem; border-bottom:1px solid var(--line);}
-  .row-table th{font-family:var(--font-mono); font-size:.72rem; font-weight:500; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.05em;}
-  @media (max-width:520px){ .row-gallery{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:520px){ .row-gallery:not(.tall){grid-template-columns:repeat(2,1fr);} }
+  .row-gallery.single{grid-template-columns:minmax(0,260px);}
   .row-links{margin-top:.5rem; display:flex; gap:1rem; font-family:var(--font-mono); font-size:.78rem;}
   .row-links a{text-decoration:none; border-bottom:1px solid var(--line);}
   .row-links a:hover{border-color:var(--accent);}
@@ -96,10 +91,23 @@
   .row-video{margin-top:.75rem; max-width:60ch; aspect-ratio:16/9; border-radius:8px; overflow:hidden; border:1px solid var(--line); background:var(--paper-raised);}
   .row-video iframe{width:100%; height:100%; border:0; display:block;}
   .carousel-nav{display:flex; align-items:center; justify-content:center; gap:1.2rem; margin-top:1.75rem; padding-top:1.25rem; border-top:1px solid var(--line);}
-  .nav-arrow{background:none; border:1px solid var(--line); border-radius:50%; width:2.2rem; height:2.2rem; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--ink-soft); font-family:var(--font-mono); font-size:1rem; flex-shrink:0;}
-  .nav-arrow:hover{border-color:var(--accent); color:var(--accent);}
+  .nav-btn{display:inline-flex; align-items:center; gap:.45rem; padding:.55rem 1rem; border-radius:999px; border:1px solid var(--line); background:var(--paper-raised); color:var(--ink-soft); font-family:var(--font-mono); font-size:.8rem; cursor:pointer; transition:transform .15s ease, box-shadow .15s ease, background .15s ease, color .15s ease, border-color .15s ease;}
+  .nav-btn:hover{border-color:var(--accent); color:var(--accent); transform:translateY(-2px); box-shadow:0 6px 16px var(--shadow);}
+  .nav-btn.primary{background:var(--accent); border-color:var(--accent); color:var(--accent-ink); font-weight:500;}
+  .nav-btn.primary:hover{color:var(--accent-ink); filter:brightness(1.1);}
+  .nav-btn:active{transform:translateY(0); box-shadow:none;}
+  .nav-btn:focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
+  .nav-ico{display:inline-block; transition:transform .15s ease;}
+  #next-slide:hover .nav-ico{transform:translateX(4px);}
+  #prev-slide:hover .nav-ico{transform:translateX(-4px);}
+  @media (prefers-reduced-motion: no-preference){
+    .nav-btn.primary.nudge{animation:nudge 1.8s ease-in-out 1s 3;}
+    @keyframes nudge{0%,100%{box-shadow:0 0 0 0 var(--accent-soft);} 50%{box-shadow:0 0 0 8px var(--accent-soft);}}
+  }
+  @media (max-width:520px){ .carousel-nav{gap:.6rem;} .nav-btn{padding:.5rem .75rem; font-size:.74rem;} }
   .carousel-dots{display:flex; gap:.5rem;}
-  .dot{width:.5rem; height:.5rem; border-radius:50%; border:none; background:var(--line); cursor:pointer; padding:0;}
+  .dot{width:.5rem; height:.5rem; border-radius:50%; border:none; background:var(--line); cursor:pointer; padding:0; transition:background .15s ease, transform .15s ease;}
+  .dot:hover{background:var(--accent); transform:scale(1.3);}
   .dot.active{background:var(--accent); width:1.4rem; border-radius:3px;}
 </style>
 
@@ -126,48 +134,26 @@
 </div>
 
 <div class="page">
-  <section style="margin-top:0;">
+  <section id="projects" style="margin-top:0;">
     <div class="section-head"><span class="idx">§1</span><h2>Projects</h2></div>
     <div class="carousel" id="project-carousel" tabindex="0">
 
-      <div class="slide active">
-        <span class="eyebrow slide-counter">Project 1 of 5</span>
-        <div class="slide-tags"><span class="tag">EE</span></div>
-        <h3>Linear Paul Ion Trap <span class="row-status">&middot; Research Assistant</span></h3>
-        <p>Over the summer, I worked as a Research Assistant in Middlebury's Physics Department, helping my professor redesign a Linear Paul Ion Trap from the ground up so it would fit within the tight volumetric constraints of his Piezo vacuum chamber. I built the CAD assemblies in Autodesk Fusion 360, working through tolerance analysis and precise component integration to turn his physics-based trapping requirements into mechanical blueprints I could actually manufacture from.</p>
-        <p>Manufacturing meant learning the CNC mill from the ground up &mdash; multi-axis setup, tapping metal, and machining aluminum stock to validate the toolpaths before committing to the final copper fabrication. Watching a design I'd modeled on a screen turn into a real, machined part sitting in my hands was the part of this project that hooked me.</p>
-        <div class="row-gallery">
-          <img src="images/ion-trap-fixtures.jpg" loading="lazy" alt="CNC-machined aluminum test fixtures for the ion trap">
-          <img src="images/ion-trap-assembled.jpg" loading="lazy" alt="Assembled Linear Paul Ion Trap prototype">
-          <img src="images/ion-trap-mounted.jpg" loading="lazy" alt="Ion trap prototype mounted for the Piezo vacuum chamber">
-        </div>
-      </div>
-
-      <div class="slide">
-        <span class="eyebrow slide-counter">Project 2 of 5</span>
+      <div data-name="Step Counter" class="slide active">
+        <span class="eyebrow slide-counter">Project 1 of 6</span>
         <div class="slide-tags"><span class="tag">EE</span><span class="tag">SWE</span></div>
-        <h3>Inverted Pendulum Robot <span class="row-status">&middot; Robotics Systems Integration Lead</span></h3>
-        <p>Middlebury's first-ever inverted pendulum robot: a 5-meter beam spanning the gap between two central steel columns, carrying a rail-mounted cart and pendulum. The pendulum starts hanging down. An operator swings it up with a joystick, and once it comes within about 11&deg; of upright the controller takes over, balances it, and holds the cart near the center of the rail.</p>
-        <p>As Robotics Systems Integration Lead, I programmed the embedded software that drives the system, writing defensive, safety-conscious code that guards against H-bridge short-circuits and other hardware failure modes. Our joystick controller came without any documentation, so I reverse-engineered it myself &mdash; reading its raw signal outputs and writing custom control code to map its inputs to the DC motors driving the cart.</p>
-        <p>Getting the pendulum to balance in real time meant getting the control theory right first. I designed and simulated several control topologies in MATLAB, applying PID and LQR theory. On the electrical side, I authored the circuit designs in KiCad and presented them to the rest of the team, keeping component integration and power distribution clean as more people built on top of the design.</p>
-      <p>The controller runs on a Raspberry Pi Pico in a 1&nbsp;kHz loop, reading two quadrature encoders (cart position and pendulum angle) and computing the motor force from a four-state LQR gain. I wrote the joystick mode: button-driven switching between idle, manual swing-up and balancing, with an automatic hand-off to LQR near upright.</p>
-      <p>Our first balance lasted 70 seconds. The runs that followed taught us more than the successes did. Our limit switch triggered false crash stops, so we switched to detecting crashes from the pendulum angle. The MATLAB gains were asking for more force than our motor could produce, so the PWM saturated and the cart jittered. Smoothing the velocity estimate with an exponential moving average and retuning the gains took us from 70 seconds to a <strong>33-minute continuous balance</strong>. Fully automatic swing-up is the next milestone.</p>
-        <div class="row-video"><iframe src="https://drive.google.com/file/d/1Y2SPMWW9bZL8wZ6LswOpu5QjLeRmfC9V/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe></div>
+        <h3>Step Counter <span class="row-status">&middot; Self-directed</span></h3>
+        <p>I built a step counter from a bare accelerometer and a tiny ESP32-S3 board: a LilyGO T-QT Pro wired to a SparkFun LIS3DH. My friends and I compete on a step-ranking app, and steps I took without my phone in my pocket never counted, so I wanted a counter I could wear on its own. I soldered the headers, wired the sensor over I2C, and wrote the driver myself from the datasheet instead of using a library, configuring it to sample at a steady 50&nbsp;Hz.</p>
+        <p>Before writing any step logic, I recorded myself walking exactly 20 steps and designed the detector around what that data showed: a low-pass filter, an adaptive threshold that works whether the board is clipped on or in a pocket, and a rhythm check that ignores the board being picked up. It counts all 20 steps on that recording, shows the day's total on the board's screen, keeps the count through power loss, and sends it to my phone over Bluetooth Low Energy. Syncing to Apple Health is next.</p>
+        <div class="row-gallery tall">
+          <img src="images/step-counter/hardware.jpg" loading="lazy" alt="T-QT showing 39 steps, wired to a SparkFun LIS3DH breakout on a breadboard">
+          <img src="images/step-counter/soldering_timelapse.gif" loading="lazy" alt="Timelapse of soldering the headers">
+          <img src="images/step-counter/nrf_connect_steps.png" loading="lazy" alt="nRF Connect on iPhone reading 61 steps from the custom Bluetooth service">
+        </div>
+        <div class="row-links"><a href="https://github.com/inezamizero/step-counter" target="_blank" rel="noopener">View on GitHub</a></div>
       </div>
 
-      <div class="slide">
-        <span class="eyebrow slide-counter">Project 3 of 5</span>
-        <div class="slide-tags"><span class="tag">EE</span></div>
-        <h3>8-Bit Computer</h3>
-        <p>As part of my Industrial Design coursework, I designed and implemented an 8-bit computer at the hardware level, constructing each subsystem from discrete integrated circuits. The project began with the design of a computer clock and progressed through the development and integration of the core architectural components up to the EEPROM.</p>
-        <p>I implemented key components of the computer, including the Arithmetic Logic Unit (ALU), program counter, registers, latches, RAM, and EEPROM. The ALU was built using TTL logic, incorporating integrated circuits such as the 74LS86 XOR gate and the 74LS83 4-bit adder to perform arithmetic operations including addition and subtraction. Through this process, I developed a strong understanding of how combinational and sequential logic interact to enable computation.</p>
-        <p>Over the course of the semester, I dedicated approximately six hours per week to circuit design, assembly, testing, and debugging alongside a partner. Each subsystem was constructed, validated independently, and then integrated into the larger system, reinforcing concepts such as data flow, clock synchronization, and state management. This hands-on approach provided a concrete understanding of how low-level hardware components collectively form a functioning computer.</p>
-        <p>In addition to circuit implementation, I developed technical proficiency in drafting and interpreting schematics, translating logical designs into physical hardware, and systematically troubleshooting electronic systems. This project served as my first rigorous exposure to electronics and computer architecture and played a pivotal role in shaping my interest in pursuing Electrical Engineering.</p>
-        <div class="row-video"><iframe src="https://drive.google.com/file/d/1oJhi6xoUpYk9sE74d4NYtbMq90mw3EDk/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe></div>
-      </div>
-
-      <div class="slide">
-        <span class="eyebrow slide-counter">Project 4 of 5</span>
+      <div data-name="PassGuide" class="slide">
+        <span class="eyebrow slide-counter">Project 2 of 6</span>
         <div class="slide-tags"><span class="tag">EE</span><span class="tag">SWE</span></div>
         <h3>PassGuide</h3>
         <p>The goal of this project, created with teammates from my Embedded Systems class, was to extend a driver's situational awareness by monitoring areas beyond their natural line of sight. We designed a sensor-based system capable of detecting vehicles in visually obstructed regions and communicating this information to approaching drivers through a clear visual alert, similar to a traffic-light signal.</p>
@@ -179,49 +165,63 @@
         <div class="row-video"><iframe src="https://drive.google.com/file/d/1Xn9pw0aXVl3hj0-awZxdRkob2oVAlvP9/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe></div>
       </div>
 
-      <div class="slide">
-        <span class="eyebrow slide-counter">Project 5 of 5</span>
+      <div data-name="Inverted Pendulum" class="slide">
+        <span class="eyebrow slide-counter">Project 3 of 6</span>
         <div class="slide-tags"><span class="tag">EE</span><span class="tag">SWE</span></div>
-        <h3>Step Counter <span class="row-status">&middot; Self-directed</span></h3>
-        <p>A step counter I built from a bare accelerometer and a tiny ESP32-S3 board (LilyGO T-QT Pro with a SparkFun LIS3DH). It reads the sensor over I2C, detects steps with an algorithm I tuned on my own recorded walking data, shows today's count on the board's 0.85" screen, keeps the count through power loss, and publishes it over Bluetooth Low Energy.</p>
-        <p>My friends and I compete on Stompers, a step-ranking app, and steps I took without my phone in my pocket never counted. So I built my own counter that I can wear without the phone.</p>
-        <div class="row-gallery tall">
-          <img src="images/step-counter/hardware.jpg" loading="lazy" alt="T-QT showing 39 steps, wired to a SparkFun LIS3DH breakout on a breadboard">
-          <img src="images/step-counter/soldering_timelapse.gif" loading="lazy" alt="Timelapse of soldering the headers">
-          <img src="images/step-counter/nrf_connect_steps.png" loading="lazy" alt="nRF Connect on iPhone reading 61 steps from the custom Bluetooth service">
+        <h3>Inverted Pendulum Robot <span class="row-status">&middot; Robotics Systems Integration Lead</span></h3>
+        <p>Middlebury's first-ever inverted pendulum robot: a 5-meter beam spanning the gap between two central steel columns, carrying a rail-mounted cart and pendulum. The pendulum starts hanging down. An operator swings it up with a joystick, and once it comes within about 11&deg; of upright the controller takes over, balances it, and holds the cart near the center of the rail.</p>
+        <p>As Robotics Systems Integration Lead, I programmed the embedded software that drives the system, writing defensive, safety-conscious code that guards against H-bridge short-circuits and other hardware failure modes. Our joystick controller came without any documentation, so I reverse-engineered it myself &mdash; reading its raw signal outputs and writing custom control code to map its inputs to the DC motors driving the cart.</p>
+        <p>Getting the pendulum to balance in real time meant getting the control theory right first. I designed and simulated several control topologies in MATLAB, applying PID and LQR theory. On the electrical side, I authored the circuit designs in KiCad and presented them to the rest of the team, keeping component integration and power distribution clean as more people built on top of the design.</p>
+      <p>The controller runs on a Raspberry Pi Pico in a 1&nbsp;kHz loop, reading two quadrature encoders (cart position and pendulum angle) and computing the motor force from a four-state LQR gain. I wrote the joystick mode: button-driven switching between idle, manual swing-up and balancing, with an automatic hand-off to LQR near upright.</p>
+      <p>Our first balance lasted 70 seconds. The runs that followed taught us more than the successes did. Our limit switch triggered false crash stops, so we switched to detecting crashes from the pendulum angle. The MATLAB gains were asking for more force than our motor could produce, so the PWM saturated and the cart jittered. Smoothing the velocity estimate with an exponential moving average and retuning the gains took us from 70 seconds to a <strong>33-minute continuous balance</strong>. Fully automatic swing-up is the next milestone.</p>
+        <div class="row-video"><iframe src="https://drive.google.com/file/d/1Y2SPMWW9bZL8wZ6LswOpu5QjLeRmfC9V/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe></div>
+      </div>
+
+      <div data-name="Linear Paul Ion Trap" class="slide">
+        <span class="eyebrow slide-counter">Project 4 of 6</span>
+        <div class="slide-tags"><span class="tag">EE</span></div>
+        <h3>Linear Paul Ion Trap <span class="row-status">&middot; Research Assistant</span></h3>
+        <p>Over the summer, I worked as a Research Assistant in Middlebury's Physics Department, helping my professor redesign a Linear Paul Ion Trap from the ground up so it would fit within the tight volumetric constraints of his Piezo vacuum chamber. I built the CAD assemblies in Autodesk Fusion 360, working through tolerance analysis and precise component integration to turn his physics-based trapping requirements into mechanical blueprints I could actually manufacture from.</p>
+        <p>Manufacturing meant learning the CNC mill from the ground up &mdash; multi-axis setup, tapping metal, and machining aluminum stock to validate the toolpaths before committing to the final copper fabrication. Watching a design I'd modeled on a screen turn into a real, machined part sitting in my hands was the part of this project that hooked me.</p>
+        <div class="row-gallery">
+          <img src="images/ion-trap-fixtures.jpg" loading="lazy" alt="CNC-machined aluminum test fixtures for the ion trap">
+          <img src="images/ion-trap-assembled.jpg" loading="lazy" alt="Assembled Linear Paul Ion Trap prototype">
+          <img src="images/ion-trap-mounted.jpg" loading="lazy" alt="Ion trap prototype mounted for the Piezo vacuum chamber">
         </div>
-        <p>I didn't use a sensor library. I wrote the register reads and writes myself from the LIS3DH datasheet: 50&nbsp;Hz, &plusmn;4&nbsp;g, 12-bit, with the loop paced by the sensor's data-ready flag so every sample lands exactly 20&nbsp;ms apart. I use the magnitude &radic;(x&sup2;&nbsp;+&nbsp;y&sup2;&nbsp;+&nbsp;z&sup2;), so the count doesn't depend on how the device is tilted or clipped on.</p>
-        <figure class="row-figure">
-          <img src="images/step-counter/wiring.svg" loading="lazy" alt="Wiring diagram: T-QT 3V, GND, IO16, IO17, IO18 to LIS3DH VCC, GND, SDA, SCL, I1">
-        </figure>
-        <p>Before writing any step logic, I recorded myself taking exactly 20 steps. Each step is a sharp spike to about 1.1&ndash;1.2&nbsp;g, but picking the board up and moving it to my hip made spikes just as tall, at uneven intervals. Every detection rule comes from something visible in that data: a 4&nbsp;Hz Butterworth low-pass filter, hysteresis, a 0.3&ndash;2.0&nbsp;s step gap, and a rhythm check that only starts counting after 4 evenly spaced steps.</p>
-        <figure class="row-figure">
-          <img src="images/step-counter/walk_plot.png" loading="lazy" alt="Plot of the recorded 20-step walk: acceleration magnitude over time">
-          <figcaption>The recorded walk I tuned the detector on (3,015 samples at 50 Hz).</figcaption>
-        </figure>
-        <p>I measured what each rule contributes by replaying the recording through a Python port of the firmware logic:</p>
-        <table class="row-table">
-          <tr><th>Rules applied</th><th>Count (true: 20)</th></tr>
-          <tr><td>Threshold only</td><td>26</td></tr>
-          <tr><td>+ 0.3 s minimum gap</td><td>25</td></tr>
-          <tr><td>+ 4 steps in a row</td><td>25</td></tr>
-          <tr><td>+ steady rhythm</td><td><strong>20</strong></td></tr>
-        </table>
-        <p>A fixed threshold missed softer steps, so v2 adapts: it tracks the resting baseline and a running typical step height, and arms at 40% of the typical step. On the same walk scaled to 40% strength, v1 counted 4 steps and v2 counted 19. The count is saved to flash (at most every 30&nbsp;s, to limit wear), and a custom GATT service exposes total steps (read and notify) and a clock the phone sets, since the board has no real-time clock.</p>
-        <p>The 20/20 result is on the recording I tuned it on, so held-out validation (hip, pocket, bag, and non-walking activity) is next, along with writing steps to Apple Health and cutting power draw.</p>
-        <div class="row-links"><a href="https://github.com/inezamizero/step-counter" target="_blank" rel="noopener">View on GitHub</a></div>
+      </div>
+
+      <div data-name="3D Printer" class="slide">
+        <span class="eyebrow slide-counter">Project 5 of 6</span>
+        <div class="slide-tags"><span class="tag">EE</span></div>
+        <h3>Original Prusa MK4S 3D Printer <span class="row-status">&middot; Team Leader</span></h3>
+        <p>In August 2024, I led a small group assembling the Computer Science department's first 3D printer, an Original Prusa MK4S, from its kit of parts. Once it was built, I calibrated the frame alignment and extrusion parameters so the department could count on reliable, repeatable prints.</p>
+        <div class="row-gallery tall single">
+          <img src="images/3d-printer/prusa-assembly.gif" loading="lazy" alt="Timelapse of assembling printed parts for the Prusa MK4S">
+        </div>
+      </div>
+
+      <div data-name="8-Bit Computer" class="slide">
+        <span class="eyebrow slide-counter">Project 6 of 6</span>
+        <div class="slide-tags"><span class="tag">EE</span></div>
+        <h3>8-Bit Computer</h3>
+        <p>As part of my Industrial Design coursework, I designed and implemented an 8-bit computer at the hardware level, constructing each subsystem from discrete integrated circuits. The project began with the design of a computer clock and progressed through the development and integration of the core architectural components up to the EEPROM.</p>
+        <p>I implemented key components of the computer, including the Arithmetic Logic Unit (ALU), program counter, registers, latches, RAM, and EEPROM. The ALU was built using TTL logic, incorporating integrated circuits such as the 74LS86 XOR gate and the 74LS83 4-bit adder to perform arithmetic operations including addition and subtraction. Through this process, I developed a strong understanding of how combinational and sequential logic interact to enable computation.</p>
+        <p>Over the course of the semester, I dedicated approximately six hours per week to circuit design, assembly, testing, and debugging alongside a partner. Each subsystem was constructed, validated independently, and then integrated into the larger system, reinforcing concepts such as data flow, clock synchronization, and state management. This hands-on approach provided a concrete understanding of how low-level hardware components collectively form a functioning computer.</p>
+        <p>In addition to circuit implementation, I developed technical proficiency in drafting and interpreting schematics, translating logical designs into physical hardware, and systematically troubleshooting electronic systems. This project served as my first rigorous exposure to electronics and computer architecture and played a pivotal role in shaping my interest in pursuing Electrical Engineering.</p>
+        <div class="row-video"><iframe src="https://drive.google.com/file/d/1oJhi6xoUpYk9sE74d4NYtbMq90mw3EDk/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe></div>
       </div>
 
       <div class="carousel-nav">
-        <button type="button" class="nav-arrow" id="prev-slide" aria-label="Previous project">&larr;</button>
+        <button type="button" class="nav-btn" id="prev-slide" aria-label="Previous project"><span class="nav-ico">&larr;</span> Prev</button>
         <div class="carousel-dots">
-          <button type="button" class="dot active" data-index="0" aria-label="Go to slide 1"></button>
-          <button type="button" class="dot" data-index="1" aria-label="Go to slide 2"></button>
-          <button type="button" class="dot" data-index="2" aria-label="Go to slide 3"></button>
-          <button type="button" class="dot" data-index="3" aria-label="Go to slide 4"></button>
-          <button type="button" class="dot" data-index="4" aria-label="Go to slide 5"></button>
+          <button type="button" class="dot active" data-index="0" aria-label="Go to project 1"></button>
+          <button type="button" class="dot" data-index="1" aria-label="Go to project 2"></button>
+          <button type="button" class="dot" data-index="2" aria-label="Go to project 3"></button>
+          <button type="button" class="dot" data-index="3" aria-label="Go to project 4"></button>
+          <button type="button" class="dot" data-index="4" aria-label="Go to project 5"></button>
+          <button type="button" class="dot" data-index="5" aria-label="Go to project 6"></button>
         </div>
-        <button type="button" class="nav-arrow" id="next-slide" aria-label="Next project">&rarr;</button>
+        <button type="button" class="nav-btn primary" id="next-slide" aria-label="Next project"><span id="next-label">Next</span> <span class="nav-ico">&rarr;</span></button>
       </div>
     </div>
   </section>
@@ -238,18 +238,30 @@
 (function(){
   var slides = document.querySelectorAll('#project-carousel .slide');
   var dots = document.querySelectorAll('#project-carousel .dot');
+  var nextBtn = document.getElementById('next-slide');
+  var nextLabel = document.getElementById('next-label');
+  var top = document.getElementById('projects');
+  var smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var current = 0;
-  function show(i){
+  nextBtn.classList.add('nudge');
+  function show(i, scroll){
     current = (i + slides.length) % slides.length;
     slides.forEach(function(s, idx){ s.classList.toggle('active', idx === current); });
     dots.forEach(function(d, idx){ d.classList.toggle('active', idx === current); });
+    nextLabel.textContent = 'Next: ' + slides[(current + 1) % slides.length].dataset.name;
+    if(scroll){
+      nextBtn.classList.remove('nudge');
+      // bring the reader back to the start of the project they just opened
+      if(top.getBoundingClientRect().top < 0){ top.scrollIntoView({behavior: smooth ? 'smooth' : 'auto', block: 'start'}); }
+    }
   }
-  document.getElementById('prev-slide').addEventListener('click', function(){ show(current - 1); });
-  document.getElementById('next-slide').addEventListener('click', function(){ show(current + 1); });
-  dots.forEach(function(d, idx){ d.addEventListener('click', function(){ show(idx); }); });
+  document.getElementById('prev-slide').addEventListener('click', function(){ show(current - 1, true); });
+  nextBtn.addEventListener('click', function(){ show(current + 1, true); });
+  dots.forEach(function(d, idx){ d.addEventListener('click', function(){ show(idx, true); }); });
   document.getElementById('project-carousel').addEventListener('keydown', function(e){
-    if(e.key === 'ArrowLeft'){ show(current - 1); }
-    if(e.key === 'ArrowRight'){ show(current + 1); }
+    if(e.key === 'ArrowLeft'){ show(current - 1, true); }
+    if(e.key === 'ArrowRight'){ show(current + 1, true); }
   });
+  show(0, false);
 })();
 </script>
